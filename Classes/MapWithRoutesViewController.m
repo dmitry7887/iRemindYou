@@ -34,8 +34,10 @@
 						 CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)] autorelease];
 	
 	[self.view addSubview:mapView];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showViewController:) name:@"showViewController" object:nil];
+
 	
-	mapView.placeMarkStore.viewController=self;
+
     
     Place* home = [[[Place alloc] init] autorelease];
 	home.name = @"Home";
@@ -61,6 +63,9 @@
 
 }
 
+- (void)showViewController:(NSNotification *)notification {
+    [self presentModalViewController:[notification object] animated:YES];
+}
 
 /*
 // Override to allow orientations other than the default portrait orientation.

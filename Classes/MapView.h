@@ -3,12 +3,12 @@
 //
 //
 
-#import <UIKit/UIKit.h>
+
 #import <MapKit/MapKit.h>
 #import "RegexKitLite.h"
 #import "Place.h"
 #import "PlaceMark.h"
-#import "PlaceMarkStore.h"
+#import "PlaceStore.h"
 
 @interface MapView : UIView<MKMapViewDelegate> {
 
@@ -18,14 +18,15 @@
 	NSArray* routes;
 	
 	UIColor* lineColor;
-    PlaceMarkStore* placeMarkStore;
+    PlaceStore* placeStore;
 }
 
 @property (nonatomic, retain) UIColor* lineColor;
 @property(nonatomic, retain) MKMapView *mapView;
-@property(nonatomic, retain) PlaceMarkStore* placeMarkStore;
+@property(nonatomic, retain) PlaceStore* placeStore;
 
 -(void) showRouteFrom: (Place*) f to:(Place*) t;
+-(PlaceMark *) findPlaceMarkByPlace:(Place *) p;
 
 
 @end

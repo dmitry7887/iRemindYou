@@ -16,7 +16,7 @@
 
 @implementation MapView
 
-@synthesize lineColor, mapView, placeMarkStore;
+@synthesize lineColor, mapView, placeStore;
 
 - (id) initWithFrame:(CGRect) frame
 {
@@ -34,11 +34,20 @@
 
         UILongPressGestureRecognizer *lpgr = [[UILongPressGestureRecognizer alloc] 
                                               initWithTarget:self action:@selector(handleLongPress:)];
-        lpgr.minimumPressDuration = 5.0; //user needs to press for 5 seconds
+        lpgr.minimumPressDuration = 1.0; //user needs to press for 1 seconds
         [mapView addGestureRecognizer:lpgr];
         [lpgr release];
         
-        placeMarkStore=[[PlaceMarkStore alloc]initWithView:mapView];
+        placeStore=[PlaceStore sharedPlaceStore];
+        Place * p;
+        for (p in placeStore.placeList){
+            PlaceMark * placeMark=[[PlaceMark alloc] initWithPlace:p];
+            [mapView addAnnotation:placeMark];
+        }
+        
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(addPlaceMark:) name:@"addPlaceMark" object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(removePlaceMark:) name:@"removePlaceMark" object:nil];
+        
         [mapView.userLocation addObserver:self forKeyPath:@"location" options:(NSKeyValueObservingOptionNew|NSKeyValueObservingOptionOld) context:nil];
 
 	}
@@ -71,11 +80,53 @@
     [self.mapView convertPoint:touchPoint toCoordinateFromView:self.mapView];
     
     
-    PlaceMark* placeMark = [[PlaceMark alloc] initWithCoordinate:touchMapCoordinate];
-    [placeMarkStore addPlaceMark:placeMark];    
+    Place * place = [[Place alloc] init];
+    place.latitude=touchMapCoordinate.latitude;
+    place.longitude=touchMapCoordinate.longitude;
+    
+    [placeStore addPlace:place];    
 }
 
+#pragma mark -
+#pragma mark Methods for working with PlaceStore
 
+-(PlaceMark *) findPlaceMarkByPlace:(Place *) p
+{
+    PlaceMark *placeMark;
+    for (placeMark in [mapView annotations]){
+        if (p==placeMark.place){
+            return placeMark;
+            break;
+        }
+    }
+    return nil;
+}
+
+-(void) addPlaceMark:(NSNotification *)notification {
+    Place * place=[notification object];
+    if (place){
+        PlaceMark *placeMark=[[PlaceMark alloc]initWithPlace:place];
+        [mapView addAnnotation:placeMark]; 
+    }
+}
+
+-(void) updatePlaceMark:(NSNotification *)notification {
+    Place * place=[notification object];
+    if (place){
+        PlaceMark *placeMark=[self findPlaceMarkByPlace:place];
+        [mapView removeAnnotation:placeMark]; 
+        [mapView addAnnotation:placeMark]; 
+
+    }
+}
+
+-(void) removePlaceMark:(NSNotification *)notification {
+    Place * place=[notification object];
+    if (place){
+        PlaceMark *placeMark=[self findPlaceMarkByPlace:place];
+        [mapView removeAnnotation:placeMark]; 
+    }
+}
 
 -(NSMutableArray *)decodePolyLine: (NSMutableString *)encoded {
 	[encoded replaceOccurrencesOfString:@"\\\\" withString:@"\\"
@@ -260,7 +311,8 @@
 
 - (void)mapView:(MKMapView *)mapView annotationView:(MKAnnotationView *)view calloutAccessoryControlTapped:(UIControl *)control {
     NSLog(@"%@",[view.annotation description]);
-    [placeMarkStore editPlaceMark:view.annotation];
+    PlaceMark *placeMark=view.annotation;
+    [placeStore editPlace:placeMark.place];
 }
 
 - (void)dealloc {
