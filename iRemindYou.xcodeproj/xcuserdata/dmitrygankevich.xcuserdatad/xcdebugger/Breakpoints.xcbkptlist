@@ -8,13 +8,13 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          isPathRelative = "1"
-         filePath = "Classes/PlaceMarkStore.m"
-         timestampString = "336402738.59711"
+         filePath = "Classes/MapView.m"
+         timestampString = "336486342.276421"
          startingColumnNumber = "2147483647"
          endingColumnNumber = "2147483647"
-         startingLineNumber = "190"
-         endingLineNumber = "190"
-         landmarkName = "-eventEditViewController:didCompleteWithAction:"
+         startingLineNumber = "23"
+         endingLineNumber = "23"
+         landmarkName = "-initWithFrame:"
          landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
@@ -22,13 +22,41 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          isPathRelative = "1"
-         filePath = "Classes/PlaceMarkStore.m"
-         timestampString = "336403335.106621"
+         filePath = "Classes/PlaceStore.m"
+         timestampString = "336486790.464852"
          startingColumnNumber = "2147483647"
          endingColumnNumber = "2147483647"
-         startingLineNumber = "232"
-         endingLineNumber = "232"
-         landmarkName = "-eventEditViewController:didCompleteWithAction:"
+         startingLineNumber = "67"
+         endingLineNumber = "67"
+         landmarkName = "-init"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "No"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         isPathRelative = "1"
+         filePath = "Classes/MapView.m"
+         timestampString = "336487561.344097"
+         startingColumnNumber = "2147483647"
+         endingColumnNumber = "2147483647"
+         startingLineNumber = "106"
+         endingLineNumber = "106"
+         landmarkName = "-addPlaceMark:"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "No"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         isPathRelative = "1"
+         filePath = "Classes/MapView.m"
+         timestampString = "336491764.874974"
+         startingColumnNumber = "2147483647"
+         endingColumnNumber = "2147483647"
+         startingLineNumber = "177"
+         endingLineNumber = "177"
+         landmarkName = "-calculateRoutesFrom:to:"
          landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
@@ -37,12 +65,26 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "Classes/MapView.m"
-         timestampString = "336405109.347254"
+         timestampString = "336492335.331227"
          startingColumnNumber = "2147483647"
          endingColumnNumber = "2147483647"
-         startingLineNumber = "252"
-         endingLineNumber = "252"
-         landmarkName = "-mapView:annotationView:didChangeDragState:fromOldState:"
+         startingLineNumber = "180"
+         endingLineNumber = "180"
+         landmarkName = "-calculateRoutesFrom:to:"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "No"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         isPathRelative = "1"
+         filePath = "Classes/MapView.m"
+         timestampString = "336492335.92332"
+         startingColumnNumber = "2147483647"
+         endingColumnNumber = "2147483647"
+         startingLineNumber = "176"
+         endingLineNumber = "176"
+         landmarkName = "-calculateRoutesFrom:to:"
          landmarkType = "5">
       </FileBreakpoint>
    </FileBreakpoints>

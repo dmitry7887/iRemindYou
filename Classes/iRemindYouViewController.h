@@ -8,7 +8,7 @@
 #import "MapView.h"
 
 
-@interface MapWithRoutesViewController : UIViewController {
+@interface iRemindYouViewController : UIViewController {
 
 }
 @end

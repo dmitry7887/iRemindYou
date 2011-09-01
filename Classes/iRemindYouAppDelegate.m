@@ -4,10 +4,10 @@
 //
 //
 
-#import "MapWithRoutesAppDelegate.h"
-#import "MapWithRoutesViewController.h"
+#import "iRemindYouAppDelegate.h"
+#import "iRemindYouViewController.h"
 
-@implementation MapWithRoutesAppDelegate
+@implementation iRemindYouAppDelegate
 
 @synthesize window;
 @synthesize viewController;

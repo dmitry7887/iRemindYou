@@ -4,9 +4,9 @@
 //
 //
 
-#import "MapWithRoutesViewController.h"
+#import "iRemindYouViewController.h"
 
-@implementation MapWithRoutesViewController
+@implementation iRemindYouViewController
 
 
 /*
@@ -58,7 +58,7 @@
 	home2.longitude = 28.884546;
     
     
-//	[mapView showRouteFrom:home to:office];
+	[mapView showRouteFrom:home to:office];
 //	[mapView showRouteFrom:office to:home2];
 
 }
@@ -67,13 +67,11 @@
     [self presentModalViewController:[notification object] animated:YES];
 }
 
-/*
 // Override to allow orientations other than the default portrait orientation.
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
     // Return YES for supported orientations
-    return (interfaceOrientation == UIInterfaceOrientationPortrait);
+    return YES;
 }
-*/
 
 - (void)didReceiveMemoryWarning {
 	// Releases the view if it doesn't have a superview.
@@ -90,5 +88,6 @@
 - (void)dealloc {
     [super dealloc];
 }
+
 
 @end

@@ -41,7 +41,7 @@
         placeStore=[PlaceStore sharedPlaceStore];
         Place * p;
         for (p in placeStore.placeList){
-            PlaceMark * placeMark=[[PlaceMark alloc] initWithPlace:p];
+            PlaceMark * placeMark=[[[PlaceMark alloc] initWithPlace:p] autorelease];
             [mapView addAnnotation:placeMark];
         }
         
@@ -84,7 +84,7 @@
     place.latitude=touchMapCoordinate.latitude;
     place.longitude=touchMapCoordinate.longitude;
     
-    [placeStore addPlace:place];    
+    [placeStore addPlace:place];
 }
 
 #pragma mark -
@@ -103,7 +103,7 @@
 }
 
 -(void) addPlaceMark:(NSNotification *)notification {
-    Place * place=[notification object];
+    Place * place=[[notification object] retain];
     if (place){
         PlaceMark *placeMark=[[PlaceMark alloc]initWithPlace:place];
         [mapView addAnnotation:placeMark]; 
@@ -176,6 +176,8 @@
 	NSURL* apiUrl = [NSURL URLWithString:apiUrlStr];
 	NSLog(@"api url: %@", apiUrl);
 	NSString *apiResponse = [NSString stringWithContentsOfURL:apiUrl];
+    NSString *TimeLong=[apiResponse stringByMatching:@"tooltipHtml:\\\"([^\\\"]*)\\\""];
+    NSLog(@"%@s",TimeLong);
 	NSString* encodedPoints = [apiResponse stringByMatching:@"points:\\\"([^\\\"]*)\\\"" capture:1L];
 	
 	return [self decodePolyLine:[encodedPoints mutableCopy]];
