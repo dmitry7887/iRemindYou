@@ -115,6 +115,22 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(PlaceStore);
     [[NSNotificationCenter defaultCenter] postNotificationName:@"removePlaceMark" object:placeEdit];
     placeEdit=nil;
 }
+
+-(void) updatePlace: (Place*) place;
+{
+    EKEventEditViewController *addController = [[EKEventEditViewController alloc] initWithNibName:nil bundle:nil];
+    placeEdit=place; 
+    EditState=YES;
+    
+    place.event.location=[[NSString stringWithFormat:@"lat=%f",place.latitude] stringByAppendingString:[NSString stringWithFormat:@" lon=%f",place.longitude]];
+    // set the addController's event store to the current event store.
+    addController.eventStore = eventStore;
+    addController.event=place.event;
+    NSError *error = nil;
+    [addController.eventStore saveEvent:addController.event span:EKSpanThisEvent error:&error];
+    [addController release];
+}
+
 #pragma mark -
 #pragma mark ReverseGeocoderDelegate
 - (IBAction)reverseGeocodeByLocation:(CLLocationCoordinate2D) coordinate
@@ -204,6 +220,7 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(PlaceStore);
                     placeEdit.name=thisEvent.title;
                     placeEdit.description=thisEvent.notes;
                     placeEdit.event.location=[[NSString stringWithFormat:@"lat=%f",placeEdit.latitude] stringByAppendingString:[NSString stringWithFormat:@" lon=%f",placeEdit.longitude]];
+                    
                     if (EditState){
                         [[NSNotificationCenter defaultCenter] postNotificationName:@"removePlaceMark" object:placeEdit];
                     }

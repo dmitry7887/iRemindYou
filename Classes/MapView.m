@@ -49,7 +49,6 @@
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(removePlaceMark:) name:@"removePlaceMark" object:nil];
         
         [mapView.userLocation addObserver:self forKeyPath:@"location" options:(NSKeyValueObservingOptionNew|NSKeyValueObservingOptionOld) context:nil];
-
 	}
 	return self;
 }
@@ -288,16 +287,14 @@
     return view;
 }
 
-- (void)mapView:(MKMapView *)mapView annotationView:(MKAnnotationView *)annotationView didChangeDragState:(MKAnnotationViewDragState)newState fromOldState:(MKAnnotationViewDragState)oldState {
-    
-    if (oldState == MKAnnotationViewDragStateStarting && newState == MKAnnotationViewDragStateEnding)
-    {
-        NSLog(@"Ending drag");
+-(void)mapView:(MKMapView *)mapView annotationView:(MKAnnotationView *)view didChangeDragState:(MKAnnotationViewDragState)newState fromOldState:(MKAnnotationViewDragState)oldState {
+    if (oldState == MKAnnotationViewDragStateDragging) {
+        
     }
-    
-    if (newState == MKAnnotationViewDragStateStarting)
-    {
-        NSLog(@"Beginning drag");
+    if (newState == MKAnnotationViewDragStateEnding) {
+        PlaceMark *placeMark=view.annotation;
+        Place *p=placeMark.place;
+        [placeStore updatePlace:p];
     }
 }
 

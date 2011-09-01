@@ -34,6 +34,7 @@
 -(void) addPlace: (Place*) place;
 -(void) editPlace: (Place*) place;
 -(void) removePlace: (Place*) place;
+-(void) updatePlace: (Place*) place;
 
 
 - (IBAction)reverseGeocodeCurrentLocation;

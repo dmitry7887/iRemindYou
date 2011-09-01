@@ -20,4 +20,7 @@
 
 -(id) initWithPlace: (Place*) p;
 
+// Called as a result of dragging an annotation view.
+- (void)setCoordinate:(CLLocationCoordinate2D)newCoordinate;
+
 @end

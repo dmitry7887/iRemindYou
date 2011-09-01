@@ -31,7 +31,12 @@
 {
 	return self.place.name;
 }
-
+- (void)setCoordinate:(CLLocationCoordinate2D)newCoordinate;
+{
+    coordinate=newCoordinate;
+    place.latitude=coordinate.latitude;
+    place.longitude=coordinate.longitude;
+}
 - (void) dealloc
 {
 	[place release];
