@@ -19,6 +19,7 @@
 	
 	UIColor* lineColor;
     PlaceStore* placeStore;
+    NSString* timeToPlaceMark;
 }
 
 @property (nonatomic, retain) UIColor* lineColor;

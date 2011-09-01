@@ -128,6 +128,9 @@
     }
 }
 
+#pragma mark -
+#pragma mark Working with routes
+
 -(NSMutableArray *)decodePolyLine: (NSMutableString *)encoded {
 	[encoded replaceOccurrencesOfString:@"\\\\" withString:@"\\"
 								options:NSLiteralSearch
@@ -176,10 +179,8 @@
 	NSURL* apiUrl = [NSURL URLWithString:apiUrlStr];
 	NSLog(@"api url: %@", apiUrl);
 	NSString *apiResponse = [NSString stringWithContentsOfURL:apiUrl];
-    NSString *TimeLong=[apiResponse stringByMatching:@"tooltipHtml:\\\"([^\\\"]*)\\\""];
-    NSLog(@"%@s",TimeLong);
+    timeToPlaceMark=[apiResponse stringByMatching:@"tooltipHtml:\\\"([^\\\"]*)\\\""];
 	NSString* encodedPoints = [apiResponse stringByMatching:@"points:\\\"([^\\\"]*)\\\"" capture:1L];
-	
 	return [self decodePolyLine:[encodedPoints mutableCopy]];
 }
 
@@ -230,37 +231,26 @@
 }
 
 -(void) updateRouteView {
-	CGContextRef context = 	CGBitmapContextCreate(nil, 
-												  routeView.frame.size.width, 
-												  routeView.frame.size.height, 
-												  8, 
-												  4 * routeView.frame.size.width,
-												  CGColorSpaceCreateDeviceRGB(),
-												  kCGImageAlphaPremultipliedLast);
-	
-	CGContextSetStrokeColorWithColor(context, lineColor.CGColor);
-	CGContextSetRGBFillColor(context, 0.0, 0.0, 1.0, 1.0);
-	CGContextSetLineWidth(context, 3.0);
-	
-	for(int i = 0; i < routes.count; i++) {
-		CLLocation* location = [routes objectAtIndex:i];
-		CGPoint point = [mapView convertCoordinate:location.coordinate toPointToView:routeView];
-		
-		if(i == 0) {
-			CGContextMoveToPoint(context, point.x, routeView.frame.size.height - point.y);
-		} else {
-			CGContextAddLineToPoint(context, point.x, routeView.frame.size.height - point.y);
-		}
-	}
-	
-	CGContextStrokePath(context);
-	
-	CGImageRef image = CGBitmapContextCreateImage(context);
-	UIImage* img = [UIImage imageWithCGImage:image];
-	
-	routeView.image = img;
-	CGContextRelease(context);
 
+    CLLocationCoordinate2D mapCoords[routes.count];
+    for(int i = 0; i < routes.count; i++) {
+        CLLocation* location = [routes objectAtIndex:i];
+        mapCoords[i] =location.coordinate; 
+    }
+    
+    MKPolyline *polyLine = [MKPolyline polylineWithCoordinates:mapCoords count:routes.count];
+    [mapView addOverlay:polyLine];
+    [mapView setDelegate:self];
+    
+}
+
+- (MKOverlayView *)mapView:(MKMapView *)mapView viewForOverlay:(id <MKOverlay>)overlay
+{
+    MKPolylineView *polylineView = [[[MKPolylineView alloc] initWithOverlay:overlay] autorelease];
+    polylineView.strokeColor = [UIColor blueColor];
+    polylineView.lineWidth = 2.0;
+    polylineView.alpha=0.5;
+    return polylineView;
 }
 
 #pragma mark mapView delegate functions
