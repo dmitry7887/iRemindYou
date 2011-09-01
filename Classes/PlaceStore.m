@@ -240,6 +240,11 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(PlaceStore);
                     if (EditState){
                         [[NSNotificationCenter defaultCenter] postNotificationName:@"removePlaceMark" object:placeEdit];
                     }
+                    else
+                    {
+                        [self resetPlaceToRemind];
+                    }
+                    
                     [[NSNotificationCenter defaultCenter] postNotificationName:@"addPlaceMark" object:placeEdit];
                 }
 			}
