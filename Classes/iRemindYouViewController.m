@@ -58,7 +58,7 @@
 	home2.longitude = 28.884546;
     
     
-	[mapView showRouteFrom:home to:office];
+//	[mapView showRouteFrom:home to:office];
 //	[mapView showRouteFrom:office to:home2];
 
 }
