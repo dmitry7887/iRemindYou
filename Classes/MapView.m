@@ -16,13 +16,13 @@
 
 @implementation MapView
 
-@synthesize lineColor, mapView, placeStore;
+@synthesize lineColor, mapView, placeStore, canRouting;
 
 - (id) initWithFrame:(CGRect) frame
 {
 	self = [super initWithFrame:frame];
 	if (self != nil) {
-		mapView = [[MKMapView alloc] initWithFrame:CGRectMake(0, 0, frame.size.width, frame.size.height)];
+        mapView = [[MKMapView alloc] initWithFrame:CGRectMake(0, 0, frame.size.width, frame.size.height)];
 		mapView.showsUserLocation = YES;
 		[mapView setDelegate:self];
 		[self addSubview:mapView];
@@ -49,6 +49,8 @@
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(removePlaceMark:) name:@"removePlaceMark" object:nil];
         
         [mapView.userLocation addObserver:self forKeyPath:@"location" options:(NSKeyValueObservingOptionNew|NSKeyValueObservingOptionOld) context:nil];
+        canRouting=YES;
+
 	}
 	return self;
 }
@@ -89,7 +91,7 @@
 #pragma mark -
 #pragma mark Methods for working with PlaceStore
 
--(PlaceMark *) findPlaceMarkByPlace:(Place *) p
+-(PlaceMark *) PlaceMarkByPlace:(Place *) p
 {
     PlaceMark *placeMark;
     for (placeMark in [mapView annotations]){
@@ -112,7 +114,7 @@
 -(void) updatePlaceMark:(NSNotification *)notification {
     Place * place=[notification object];
     if (place){
-        PlaceMark *placeMark=[self findPlaceMarkByPlace:place];
+        PlaceMark *placeMark=[self PlaceMarkByPlace:place];
         [mapView removeAnnotation:placeMark]; 
         [mapView addAnnotation:placeMark]; 
 
@@ -122,7 +124,7 @@
 -(void) removePlaceMark:(NSNotification *)notification {
     Place * place=[notification object];
     if (place){
-        PlaceMark *placeMark=[self findPlaceMarkByPlace:place];
+        PlaceMark *placeMark=[self PlaceMarkByPlace:place];
         [mapView removeAnnotation:placeMark]; 
     }
 }
@@ -179,7 +181,15 @@
 	NSLog(@"api url: %@", apiUrl);
 	NSString *apiResponse = [NSString stringWithContentsOfURL:apiUrl];
     timeToPlaceMark=[apiResponse stringByMatching:@"tooltipHtml:\\\"([^\\\"]*)\\\""];
-	NSString* encodedPoints = [apiResponse stringByMatching:@"points:\\\"([^\\\"]*)\\\"" capture:1L];
+    NSRange range=[timeToPlaceMark rangeOfString:@"\\x26#160;"];
+    if (timeToPlaceMark){
+        timeToPlaceMark=[timeToPlaceMark stringByReplacingCharactersInRange:range withString:@" "];
+        range=[timeToPlaceMark rangeOfString:@"tooltipHtml:\" ("];
+        timeToPlaceMark=[timeToPlaceMark stringByReplacingCharactersInRange:range withString:@""];
+        range=[timeToPlaceMark rangeOfString:@")\""];
+        timeToPlaceMark=[timeToPlaceMark stringByReplacingCharactersInRange:range withString:@""];
+    }
+    NSString* encodedPoints = [apiResponse stringByMatching:@"points:\\\"([^\\\"]*)\\\"" capture:1L];
 	return [self decodePolyLine:[encodedPoints mutableCopy]];
 }
 
@@ -211,22 +221,27 @@
 }
 
 -(void) showRouteFrom: (Place*) f to:(Place*) t {
-	
+	canRouting=NO;
 	if(routes) {
-//		[mapView removeAnnotations:[mapView annotations]];
 		[routes release];
+        [mapView removeOverlays:[mapView overlays]];
 	}
 	
 	PlaceMark* from = [[[PlaceMark alloc] initWithPlace:f] autorelease];
-	PlaceMark* to = [[[PlaceMark alloc] initWithPlace:t] autorelease];
-	
-	[mapView addAnnotation:from];
-	[mapView addAnnotation:to];
-	
-	routes = [[self calculateRoutesFrom:from.coordinate to:to.coordinate] retain];
-	
-	[self updateRouteView];
-	[self centerMap];
+	PlaceMark* to = [self PlaceMarkByPlace:t];
+    if (to)
+    {
+        routes = [[self calculateRoutesFrom:from.coordinate to:to.coordinate] retain];
+        
+        [self updateRouteView];
+//        [self centerMap];
+        if (timeToPlaceMark){
+            t.description=timeToPlaceMark;
+        }
+        [mapView removeAnnotation:to];
+        [mapView addAnnotation:to];
+    }    
+    canRouting=YES;
 }
 
 -(void) updateRouteView {
@@ -240,6 +255,7 @@
     MKPolyline *polyLine = [MKPolyline polylineWithCoordinates:mapCoords count:routes.count];
     [mapView addOverlay:polyLine];
     [mapView setDelegate:self];
+        
     
 }
 

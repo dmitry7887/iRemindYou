@@ -29,37 +29,15 @@
 // Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
 - (void)viewDidLoad {
     [super viewDidLoad];
-
-	MapView* mapView = [[[MapView alloc] initWithFrame:
+    locationManager = [CLLocationManager new];
+    locationManager.delegate = self;
+    [locationManager startUpdatingLocation];
+  	mapView = [[[MapView alloc] initWithFrame:
 						 CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)] autorelease];
 	
 	[self.view addSubview:mapView];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showViewController:) name:@"showViewController" object:nil];
-
-	
-
-    
-    Place* home = [[[Place alloc] init] autorelease];
-	home.name = @"Home";
-	home.description = @"Sweet home";
-	home.latitude = 45.029598;
-	home.longitude = 28.972985;
-	
-	Place* office = [[[Place alloc] init] autorelease];
-	office.name = @"Office";
-	office.description = @"Bad office";
-	office.latitude = 41.033586;
-	office.longitude = 28.984546;
-	
-	Place* home2 = [[[Place alloc] init] autorelease];
-	home2.name = @"Home2";
-	home2.description = @"Bad home";
-	home2.latitude = 45.029598;
-	home2.longitude = 28.884546;
-    
-    
-//	[mapView showRouteFrom:home to:office];
-//	[mapView showRouteFrom:office to:home2];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showViewController:) 
+                                                 name:@"showViewController" object:nil];
 
 }
 
@@ -86,8 +64,39 @@
 }
 
 - (void)dealloc {
+    [mapView release];
+    [locationManager release];
+    [currentLocation release];
     [super dealloc];
 }
 
+#pragma mark -
+#pragma marl Delegates
+-(void) locationManager:(CLLocationManager *)manager didUpdateToLocation:(CLLocation *)newLocation fromLocation:(CLLocation *)oldLocation {
+    NSLog(@"Location updated to = %@",newLocation);
+    CLLocationDistance distance;
+    if (!currentLocation){
+        distance=1000;
+    }
+    else{
+        distance=[currentLocation distanceFromLocation:newLocation];
+    }
+
+    if (distance>100 && mapView.canRouting) {
+        NSLog(@"Recalc path...");
+        if (currentLocation){
+            [currentLocation release];
+        }
+        currentLocation=[newLocation copy];
+        Place *placeFrom=[[[Place alloc] init] autorelease];
+        placeFrom.latitude=currentLocation.coordinate.latitude;
+        placeFrom.longitude=currentLocation.coordinate.longitude;
+        Place *placeTo=[[PlaceStore sharedPlaceStore] placeToRemind];
+        if (placeTo){
+            [mapView showRouteFrom:placeFrom to:placeTo];
+        }
+    }
+    
+}
 
 @end

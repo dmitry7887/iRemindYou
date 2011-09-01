@@ -16,6 +16,7 @@
 	UIImageView* routeView;
 	
 	NSArray* routes;
+    BOOL canRouting;
 	
 	UIColor* lineColor;
     PlaceStore* placeStore;
@@ -25,9 +26,11 @@
 @property (nonatomic, retain) UIColor* lineColor;
 @property(nonatomic, retain) MKMapView *mapView;
 @property(nonatomic, retain) PlaceStore* placeStore;
+@property(nonatomic, readonly) BOOL canRouting;
 
 -(void) showRouteFrom: (Place*) f to:(Place*) t;
--(PlaceMark *) findPlaceMarkByPlace:(Place *) p;
+
+-(PlaceMark *) PlaceMarkByPlace:(Place *) p;
 
 
 @end
