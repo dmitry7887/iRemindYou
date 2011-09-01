@@ -20,22 +20,26 @@
     MKReverseGeocoder *reverseGeocoder;
     Place *placeEdit;
     BOOL EditState;
-
+    Place * placeToRemind;
 }
 
 @property (nonatomic, readonly) NSMutableSet *placeList;
 @property (nonatomic, retain) MKReverseGeocoder *reverseGeocoder;
 @property (nonatomic, retain) EKEventStore *eventStore;
 @property (nonatomic, retain) EKCalendar *defaultCalendar;
+@property (nonatomic, retain) Place * placeToRemind;
+
 
 + (PlaceStore *)sharedPlaceStore;
 - (NSArray *) fetchEventsForToday;
+- (Place *) getPlaceToRemind;
 
 -(void) addPlace: (Place*) place;
 -(void) editPlace: (Place*) place;
 -(void) removePlace: (Place*) place;
 -(void) updatePlace: (Place*) place;
-
+-(void) resetPlaceToRemind;
+-(void) setPlaceToRemind;
 
 - (IBAction)reverseGeocodeCurrentLocation;
 - (IBAction)reverseGeocodeByLocation:(CLLocationCoordinate2D) coordinate;

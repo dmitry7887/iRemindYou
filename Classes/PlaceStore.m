@@ -12,7 +12,7 @@
 @implementation PlaceStore
 SYNTHESIZE_SINGLETON_FOR_CLASS(PlaceStore);
 
-@synthesize placeList, reverseGeocoder, defaultCalendar, eventStore;
+@synthesize placeList, reverseGeocoder, defaultCalendar, eventStore, placeToRemind;
 
 - (id)init
 {
@@ -27,10 +27,9 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(PlaceStore);
         
         // Get the default calendar from store.
         defaultCalendar = [eventStore defaultCalendarForNewEvents];
-        
+        [self resetPlaceToRemind];
         // Fetch today's event on selected calendar and put them into the eventsList array
         NSArray *eventsList = [self fetchEventsForToday];
-        
         EKEvent *event;
         for (event in eventsList){
             NSString *locate=event.location;
@@ -62,13 +61,13 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(PlaceStore);
                     p.name=event.title;
                     p.description=event.notes;
                     p.event=event;
-                    
                     [placeList addObject:p];
                     //Does contain the substring
                 }
             }
         }         
     }
+    [self setPlaceToRemind];
     return self;
 }
 
@@ -129,6 +128,21 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(PlaceStore);
     NSError *error = nil;
     [addController.eventStore saveEvent:addController.event span:EKSpanThisEvent error:&error];
     [addController release];
+}
+
+#pragma mark -
+#pragma mark placeRemind accessors
+-(void) resetPlaceToRemind;
+{
+    placeToRemind=nil;
+}
+
+-(void) setPlaceToRemind;
+{
+    if (!placeToRemind){
+        placeToRemind=[self getPlaceToRemind];
+        NSLog(@"PlaceToRemind Title= %@",[placeToRemind name]);
+    }
 }
 
 #pragma mark -
@@ -220,17 +234,17 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(PlaceStore);
                     placeEdit.name=thisEvent.title;
                     placeEdit.description=thisEvent.notes;
                     placeEdit.event.location=[[NSString stringWithFormat:@"lat=%f",placeEdit.latitude] stringByAppendingString:[NSString stringWithFormat:@" lon=%f",placeEdit.longitude]];
-                    
+                    if (placeEdit==placeToRemind){
+                        [self resetPlaceToRemind];
+                    }
                     if (EditState){
                         [[NSNotificationCenter defaultCenter] postNotificationName:@"removePlaceMark" object:placeEdit];
                     }
                     [[NSNotificationCenter defaultCenter] postNotificationName:@"addPlaceMark" object:placeEdit];
-                    
                 }
 			}
 			[controller.eventStore saveEvent:controller.event span:EKSpanThisEvent error:&error];
 			//[self.tableView reloadData];
-            
 			break;
 			
 		case EKEventEditViewActionDeleted:
@@ -240,6 +254,9 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(PlaceStore);
 			// eventsList.
 			if (defaultCalendar ==  thisEvent.calendar && placeEdit!=nil && EditState) {
                 [placeList removeObject:placeEdit];
+                if (placeEdit==placeToRemind){
+                    [self resetPlaceToRemind];
+                }
                 [[NSNotificationCenter defaultCenter] postNotificationName:@"removePlaceMark" object:placeEdit];
                 [placeEdit release];
                 placeEdit=nil;
@@ -252,6 +269,9 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(PlaceStore);
 			break;
 	}
     EditState=NO;
+  
+    
+    [self setPlaceToRemind];
 	// Dismiss the modal view controller
 	[controller dismissModalViewControllerAnimated:YES];
 }
@@ -267,9 +287,7 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(PlaceStore);
 - (NSArray *)fetchEventsForToday {
 	
 	NSDate *startDate = [NSDate date];
-	
-	// endDate is 1 day = 60*60*24 seconds = 86400 seconds from startDate
-	NSDate *endDate = [NSDate dateWithTimeIntervalSinceNow:86400];
+	NSDate *endDate = [NSDate distantFuture];
 	
 	// Create the predicate. Pass it the default calendar.
 	NSArray *calendarArray = [NSArray arrayWithObject:defaultCalendar];
@@ -300,6 +318,46 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(PlaceStore);
         }
     }
     return eventsWithGeo;
+}
+
+// Fetching events happening in the next 24 hours with a predicate, limiting to the default calendar 
+- (Place *)getPlaceToRemind {
+	
+	NSDate *startDate = [NSDate date];
+	NSDate *endDate = [NSDate distantFuture];
+	
+	// Create the predicate. Pass it the default calendar.
+	NSArray *calendarArray = [NSArray arrayWithObject:defaultCalendar];
+	NSPredicate *predicate = [eventStore predicateForEventsWithStartDate:startDate endDate:endDate 
+                                                               calendars:calendarArray]; 
+	
+	// Fetch all events that match the predicate.
+	NSArray *events = [eventStore eventsMatchingPredicate:predicate];
+    EKEvent *event;
+    for (event in events){
+        NSString *locate=event.location;
+        if (locate && event.title){
+            
+            NSRange textRangeLat;
+            textRangeLat =[locate rangeOfString:@"lat"];
+            
+            NSRange textRangeLon;
+            textRangeLon =[locate rangeOfString:@" lon"];
+            
+            if(textRangeLat.location != NSNotFound && textRangeLon.location != NSNotFound)
+            { 
+                Place *p;
+                for (p in placeList){
+                    if (p.event.location==event.location){
+                        return p;
+                    }
+                }
+                break;
+            }
+        }
+    }
+    
+    return nil;
 }
 
 @end
