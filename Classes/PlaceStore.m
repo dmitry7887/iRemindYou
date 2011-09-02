@@ -122,6 +122,9 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(PlaceStore);
     EditState=YES;
     
     place.event.location=[[NSString stringWithFormat:@"lat=%f",place.latitude] stringByAppendingString:[NSString stringWithFormat:@" lon=%f",place.longitude]];
+
+    [self setPlaceToRemind];
+
     // set the addController's event store to the current event store.
     addController.eventStore = eventStore;
     addController.event=place.event;
@@ -143,6 +146,12 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(PlaceStore);
         placeToRemind=[self getPlaceToRemind];
         NSLog(@"PlaceToRemind Title= %@",[placeToRemind name]);
     }
+    
+    if (placeToRemind)
+    {
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"refreshRoutes" object:self]; 
+    }    
+
 }
 
 #pragma mark -
