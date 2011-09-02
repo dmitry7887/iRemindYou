@@ -95,7 +95,7 @@
 {
     PlaceMark *placeMark;
     for (placeMark in [mapView annotations]){
-        if (p==placeMark.place){
+        if ([placeMark respondsToSelector:@selector(place)] && p==placeMark.place){
             return placeMark;
             break;
         }
@@ -107,7 +107,7 @@
     Place * place=[[notification object] retain];
     if (place){
         PlaceMark *placeMark=[[PlaceMark alloc]initWithPlace:place];
-        [mapView addAnnotation:placeMark]; 
+        [mapView addAnnotation:placeMark];
     }
 }
 
@@ -117,7 +117,6 @@
         PlaceMark *placeMark=[self PlaceMarkByPlace:place];
         [mapView removeAnnotation:placeMark]; 
         [mapView addAnnotation:placeMark]; 
-
     }
 }
 
@@ -125,7 +124,7 @@
     Place * place=[notification object];
     if (place){
         PlaceMark *placeMark=[self PlaceMarkByPlace:place];
-        [mapView removeAnnotation:placeMark]; 
+        [mapView removeAnnotation:placeMark];
     }
 }
 
@@ -222,14 +221,14 @@
 
 -(void) showRouteFrom: (Place*) f to:(Place*) t {
 	canRouting=NO;
-	if(routes) {
+    if(routes) {
 		[routes release];
         [mapView removeOverlays:[mapView overlays]];
 	}
 	
 	PlaceMark* from = [[[PlaceMark alloc] initWithPlace:f] autorelease];
 	PlaceMark* to = [self PlaceMarkByPlace:t];
-    if (to)
+    if (to && f && t)
     {
         routes = [[self calculateRoutesFrom:from.coordinate to:to.coordinate] retain];
         
@@ -238,7 +237,6 @@
         if (timeToPlaceMark){
             t.description=timeToPlaceMark;
         }
-        [mapView removeAnnotation:to];
         [mapView addAnnotation:to];
     }    
     canRouting=YES;
