@@ -13,6 +13,7 @@
     CLLocationManager* locationManager;
     CLLocation* currentLocation;
     MapView* mapView;
+    BOOL needUpdate;
 }
 @end
 

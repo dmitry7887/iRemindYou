@@ -31,6 +31,7 @@
     [super viewDidLoad];
     locationManager = [CLLocationManager new];
     locationManager.delegate = self;
+    needUpdate=YES;
     [locationManager startUpdatingLocation];
   	mapView = [[[MapView alloc] initWithFrame:
 						 CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)] autorelease];
@@ -38,12 +39,18 @@
 	[self.view addSubview:mapView];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showViewController:) 
                                                  name:@"showViewController" object:nil];
-
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshRoutes:) name:@"refreshRoutes" object:nil];
 }
 
 - (void)showViewController:(NSNotification *)notification {
     [self presentModalViewController:[notification object] animated:YES];
 }
+
+-(void) refreshRoutes:(NSNotification *)notification {
+        needUpdate=YES;
+}
+
+
 
 // Override to allow orientations other than the default portrait orientation.
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
@@ -75,7 +82,7 @@
 -(void) locationManager:(CLLocationManager *)manager didUpdateToLocation:(CLLocation *)newLocation fromLocation:(CLLocation *)oldLocation {
     NSLog(@"Location updated to = %@",newLocation);
     CLLocationDistance distance;
-    if (!currentLocation){
+    if (needUpdate){
         distance=1000;
     }
     else{
@@ -94,7 +101,9 @@
         Place *placeTo=[[PlaceStore sharedPlaceStore] placeToRemind];
         if (placeTo){
             [mapView showRouteFrom:placeFrom to:placeTo];
+            needUpdate=NO;
         }
+        
     }
     
 }
