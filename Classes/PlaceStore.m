@@ -149,7 +149,8 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(PlaceStore);
     
     if (placeToRemind)
     {
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"refreshRoutes" object:self]; 
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"localNotify" object:placeToRemind]; 
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"refreshRoutes" object:placeToRemind]; 
     }    
 
 }
