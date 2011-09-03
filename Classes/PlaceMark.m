@@ -18,7 +18,7 @@
 		coordinate.latitude = p.latitude;
 		coordinate.longitude = p.longitude;
 		self.place = p;
-        
+        p.timeToPlace=0;
 	}
 	return self;
 }
