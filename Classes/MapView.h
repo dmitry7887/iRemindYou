@@ -20,7 +20,8 @@
 	
 	UIColor* lineColor;
     PlaceStore* placeStore;
-    NSString* timeToPlaceMark;
+    NSString* strTimeToPlace;
+    NSNumber *timeToPlace;
 }
 
 @property (nonatomic, retain) UIColor* lineColor;
@@ -29,6 +30,7 @@
 @property(nonatomic, readonly) BOOL canRouting;
 
 -(void) showRouteFrom: (Place*) f to:(Place*) t;
+-(void) calculateTimeFrom:(Place *) f to: (Place *) t;
 
 -(PlaceMark *) PlaceMarkByPlace:(Place *) p;
 

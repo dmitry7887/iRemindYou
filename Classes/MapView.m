@@ -50,6 +50,7 @@
         
         [mapView.userLocation addObserver:self forKeyPath:@"location" options:(NSKeyValueObservingOptionNew|NSKeyValueObservingOptionOld) context:nil];
         canRouting=YES;
+        timeToPlace=0;
 
 	}
 	return self;
@@ -170,6 +171,70 @@
 	
 	return array;
 }
+-(NSNumber*) timeStrToNum:(NSString *) time;
+{
+    int secs=0; 
+    int mins=0; 
+    int hours=0; 
+    
+    
+    NSString *str=time;
+    NSString *strHours;
+    NSString *strMins;
+    NSString *strSecs;
+    
+    NSRange rangeHours=[str rangeOfString:@"hours"];
+    
+    if(rangeHours.location == NSNotFound)
+    { 
+        rangeHours=[str rangeOfString:@"hour"];
+        if(rangeHours.location == NSNotFound)
+        { 
+            rangeHours=[str rangeOfString:@"ч."];
+        }
+        
+    }
+    if (rangeHours.location != NSNotFound){
+        strHours=[str substringToIndex:rangeHours.location-1];
+        hours=[strHours integerValue];
+        str=[str substringFromIndex:(rangeHours.location+rangeHours.length)];
+    }
+    
+    NSRange rangeMins=[str rangeOfString:@"mins"];
+    
+    if(rangeMins.location == NSNotFound)
+    { 
+        rangeMins=[str rangeOfString:@"min"];
+        if(rangeMins.location == NSNotFound)
+        { 
+            rangeMins=[str rangeOfString:@"мин."];
+        }
+    }
+    
+    if (rangeMins.location != NSNotFound){
+        strMins=[str substringToIndex:rangeMins.location-1];
+        mins=[strMins integerValue];
+        str=[str substringFromIndex:(rangeMins.location+rangeMins.length)];
+        
+    }
+   
+    NSRange rangeSecs=[str rangeOfString:@"secs"];    
+    if(rangeSecs.location == NSNotFound)
+    { 
+        rangeSecs=[str rangeOfString:@"sec"];
+        if(rangeSecs.location == NSNotFound)
+        { 
+            rangeSecs=[str rangeOfString:@"сек."];
+        }
+    }
+    
+    if (rangeSecs.location != NSNotFound){
+        strSecs=[str substringToIndex:rangeSecs.location-1];
+        secs=[strSecs integerValue];
+    }
+    secs=secs+mins*60+hours*3600;
+    return [NSNumber numberWithInteger:(secs)];
+}
 
 -(NSArray*) calculateRoutesFrom:(CLLocationCoordinate2D) f to: (CLLocationCoordinate2D) t {
 	NSString* saddr = [NSString stringWithFormat:@"%f,%f", f.latitude, f.longitude];
@@ -179,18 +244,48 @@
 	NSURL* apiUrl = [NSURL URLWithString:apiUrlStr];
 	NSLog(@"api url: %@", apiUrl);
 	NSString *apiResponse = [NSString stringWithContentsOfURL:apiUrl];
-    timeToPlaceMark=[apiResponse stringByMatching:@"tooltipHtml:\\\"([^\\\"]*)\\\""];
-    NSRange range=[timeToPlaceMark rangeOfString:@"\\x26#160;"];
-    if (timeToPlaceMark){
-        timeToPlaceMark=[timeToPlaceMark stringByReplacingCharactersInRange:range withString:@" "];
-        range=[timeToPlaceMark rangeOfString:@"tooltipHtml:\" ("];
-        timeToPlaceMark=[timeToPlaceMark stringByReplacingCharactersInRange:range withString:@""];
-        range=[timeToPlaceMark rangeOfString:@")\""];
-        timeToPlaceMark=[timeToPlaceMark stringByReplacingCharactersInRange:range withString:@""];
+    strTimeToPlace=[apiResponse stringByMatching:@"tooltipHtml:\\\"([^\\\"]*)"];
+    NSRange range=[strTimeToPlace rangeOfString:@"\\x26#160;"];
+
+    if (strTimeToPlace){
+        strTimeToPlace=[strTimeToPlace stringByReplacingCharactersInRange:range withString:@" "];
+        range=[strTimeToPlace rangeOfString:@"tooltipHtml:\" "];
+        strTimeToPlace=[strTimeToPlace stringByReplacingCharactersInRange:range withString:@""];
+        range=[strTimeToPlace rangeOfString:@"/ "];
+        NSString *time=[strTimeToPlace substringFromIndex:range.location+2];
+        NSLog(@"strTimeToPlace: %@", strTimeToPlace);
+        timeToPlace=[self timeStrToNum:time];
+        NSLog(@"timeToPlace: %@", timeToPlace);
     }
     NSString* encodedPoints = [apiResponse stringByMatching:@"points:\\\"([^\\\"]*)\\\"" capture:1L];
 	return [self decodePolyLine:[encodedPoints mutableCopy]];
 }
+
+-(void) calculateTimeFrom:(Place *) f to: (Place *) t;
+{
+	NSString* saddr = [NSString stringWithFormat:@"%f,%f", f.latitude, f.longitude];
+	NSString* daddr = [NSString stringWithFormat:@"%f,%f", t.latitude, t.longitude];
+	
+	NSString* apiUrlStr = [NSString stringWithFormat:@"http://maps.google.com/maps?output=dragdir&saddr=%@&daddr=%@", saddr, daddr];
+	NSURL* apiUrl = [NSURL URLWithString:apiUrlStr];
+	NSLog(@"api url: %@", apiUrl);
+	NSString *apiResponse = [NSString stringWithContentsOfURL:apiUrl];
+    strTimeToPlace=[apiResponse stringByMatching:@"tooltipHtml:\\\"([^\\\"]*)"];
+    NSRange range=[strTimeToPlace rangeOfString:@"\\x26#160;"];
+    
+    if (strTimeToPlace){
+        strTimeToPlace=[strTimeToPlace stringByReplacingCharactersInRange:range withString:@" "];
+        range=[strTimeToPlace rangeOfString:@"tooltipHtml:\" "];
+        strTimeToPlace=[strTimeToPlace stringByReplacingCharactersInRange:range withString:@""];
+        range=[strTimeToPlace rangeOfString:@"/ "];
+        NSString *time=[strTimeToPlace substringFromIndex:range.location+2];
+        NSLog(@"strTimeToPlace: %@", strTimeToPlace);
+        timeToPlace=[self timeStrToNum:time];
+        NSLog(@"timeToPlace: %@", timeToPlace);
+        t.timeToPlace=timeToPlace;
+    }
+}
+
 
 -(void) centerMap {
 	MKCoordinateRegion region;
@@ -234,9 +329,11 @@
         
         [self updateRouteView];
 //        [self centerMap];
-        if (timeToPlaceMark){
-            t.description=timeToPlaceMark;
-        }
+        if (strTimeToPlace){
+            t.description=[t.event.notes stringByAppendingString: strTimeToPlace];
+            t.timeToPlace=timeToPlace;
+            NSLog(@"time: %@ to place: %@",timeToPlace, t);
+    }
         [mapView addAnnotation:to];
     }    
     canRouting=YES;
@@ -319,6 +416,10 @@
 }
 
 - (void)dealloc {
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"addPlaceMark" object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"removePlaceMark" object:nil];
+    
 	if(routes) {
 		[routes release];
 	}
