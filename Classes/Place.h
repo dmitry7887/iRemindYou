@@ -13,7 +13,7 @@
 	double latitude;
 	double longitude;
     EKEvent* event;//Store event
-
+    NSNumber * timeToPlace;
 }
 
 @property (nonatomic, retain) NSString* name;
@@ -21,5 +21,6 @@
 @property (nonatomic) double latitude;
 @property (nonatomic) double longitude;
 @property (nonatomic, retain) EKEvent *event;
+@property (nonatomic, retain) NSNumber * timeToPlace;
 
 @end
