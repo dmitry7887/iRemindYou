@@ -82,7 +82,7 @@
     [self.mapView convertPoint:touchPoint toCoordinateFromView:self.mapView];
     
     
-    Place * place = [[Place alloc] init];
+    Place* place = [[[Place alloc] init] autorelease];
     place.latitude=touchMapCoordinate.latitude;
     place.longitude=touchMapCoordinate.longitude;
     
@@ -330,7 +330,12 @@
         [self updateRouteView];
 //        [self centerMap];
         if (strTimeToPlace){
-            t.description=[t.event.notes stringByAppendingString: strTimeToPlace];
+            if (t.event.notes){
+                t.description=[strTimeToPlace stringByAppendingString: t.event.notes];
+            }
+            else{
+                t.description=strTimeToPlace;
+            }
             t.timeToPlace=timeToPlace;
             NSLog(@"time: %@ to place: %@",timeToPlace, t);
     }
