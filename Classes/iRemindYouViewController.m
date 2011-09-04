@@ -55,6 +55,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     needUpdate=YES;
+    [[UIApplication sharedApplication] cancelAllLocalNotifications];
+
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showViewController:) 
                                                  name:@"showViewController" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshRoutes:) name:@"refreshRoutes" object:nil];
@@ -104,8 +106,7 @@
 -(void) localNotify:(NSNotification *)notification;
 {
     Place * place=[notification object];
-    NSTimeInterval ss =[[NSDate date] timeIntervalSinceDate:place.event.startDate];
-    ss=-[place.timeToPlace intValue];
+    NSTimeInterval ss =-[place.timeToPlace intValue];
     NSLog(@"startdate= %@",place.event.startDate);
     NSLog(@"ss= %f",ss);
     
@@ -147,6 +148,7 @@
     NSLog(@"Coming to foreground");
     
     self.isExecutingInBackground = NO;
+    [UIApplication sharedApplication].applicationIconBadgeNumber=0;
     
     if (locationManager != nil){
         /* Now that we are in the foreground, we can increase the accuracy
@@ -234,7 +236,9 @@
                 [mapView showRouteFrom:placeFrom to:placeTo];
             }
             needUpdate=NO;
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"localNotify" object:placeTo]; 
+            if ([placeTo.event.startDate timeIntervalSinceNow]>0){
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"localNotify" object:placeTo];
+            }    
         }
     }
 }
