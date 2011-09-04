@@ -14,6 +14,35 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(PlaceStore);
 
 @synthesize placeList, reverseGeocoder, defaultCalendar, eventStore, placeToRemind;
 
+-(CLLocationCoordinate2D) getEventCoordinate:(EKEvent *) event;
+{
+    NSString *locate=event.location;
+    CLLocationCoordinate2D coordinate;
+    if (locate && event.title){
+        
+        NSRange textRangeLat;
+        textRangeLat =[locate rangeOfString:@"lat"];
+        
+        NSRange textRangeLon;
+        textRangeLon =[locate rangeOfString:@" lon"];
+        
+        if(textRangeLat.location != NSNotFound && textRangeLon.location != NSNotFound)
+        { 
+            textRangeLat.location=textRangeLat.location+4;
+            textRangeLat.length=textRangeLon.location-textRangeLat.location;
+            textRangeLon.location=textRangeLon.location+5;
+            textRangeLon.length=locate.length-textRangeLon.location;
+            
+            NSString *lon=[locate substringWithRange:textRangeLon];
+            NSString *lat=[locate substringWithRange:textRangeLat];
+            
+            coordinate.latitude=[lat doubleValue];
+            coordinate.longitude=[lon doubleValue];
+        }
+    }
+    return coordinate;
+}
+
 - (id)init
 {
     self = [super init];
@@ -32,38 +61,14 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(PlaceStore);
         NSArray *eventsList = [self fetchEventsForToday];
         EKEvent *event;
         for (event in eventsList){
-            NSString *locate=event.location;
-            if (locate){
-                
-                NSRange textRangeLat;
-                textRangeLat =[locate rangeOfString:@"lat"];
-                
-                NSRange textRangeLon;
-                textRangeLon =[locate rangeOfString:@" lon"];
-                
-                if(textRangeLat.location != NSNotFound)
-                { 
-                    textRangeLat.location=textRangeLat.location+4;
-                    textRangeLat.length=textRangeLon.location-textRangeLat.location;
-                    textRangeLon.location=textRangeLon.location+5;
-                    textRangeLon.length=locate.length-textRangeLon.location;
-                    
-                    NSString *lon=[locate substringWithRange:textRangeLon];
-                    NSString *lat=[locate substringWithRange:textRangeLat];
-                    
-                    Place *p = [[Place alloc] init];
-                    
-                    p.latitude=[lat doubleValue];
-                    p.longitude=[lon doubleValue];
-                    
-                    
-                    
-                    p.name=event.title;
-                    p.description=event.notes;
-                    p.event=event;
-                    [placeList addObject:p];
-                }
-            }
+            CLLocationCoordinate2D coord=[self getEventCoordinate:event];
+            Place *p = [[Place alloc] init];
+            p.latitude=coord.latitude;
+            p.longitude=coord.longitude;
+            p.name=event.title;
+            p.description=event.notes;
+            p.event=event;
+            [placeList addObject:p];
         }         
     }
     [self setPlaceToRemind];
@@ -76,7 +81,7 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(PlaceStore);
 -(void) addPlace: (Place*) place;
 {
     [placeList addObject:place];
-    place.event  = [[EKEvent eventWithEventStore:eventStore] retain];
+    place.event  = [[EKEvent eventWithEventStore:eventStore]retain];
     place.event.location=[[NSString stringWithFormat:@"lat=%f",place.latitude] stringByAppendingString:[NSString stringWithFormat:@" lon=%f",place.longitude]];
     
     place.event.startDate = [NSDate date];
@@ -117,9 +122,7 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(PlaceStore);
 -(void) updatePlace: (Place*) place;
 {
     EKEventEditViewController *addController = [[EKEventEditViewController alloc] initWithNibName:nil bundle:nil];
-    placeEdit=place; 
-    EditState=YES;
-    
+  
     place.event.location=[[NSString stringWithFormat:@"lat=%f",place.latitude] stringByAppendingString:[NSString stringWithFormat:@" lon=%f",place.longitude]];
 
     [self setPlaceToRemind];
@@ -322,19 +325,9 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(PlaceStore);
     
     EKEvent *event;
     for (event in events){
-        NSString *locate=event.location;
-        if (locate && event.title){
-            
-            NSRange textRangeLat;
-            textRangeLat =[locate rangeOfString:@"lat"];
-            
-            NSRange textRangeLon;
-            textRangeLon =[locate rangeOfString:@" lon"];
-            
-            if(textRangeLat.location != NSNotFound && textRangeLon.location != NSNotFound)
-            { 
-                [eventsWithGeo addObject:event];
-            }
+        CLLocationCoordinate2D coord=[self getEventCoordinate:event];
+        if (coord.latitude!=0 && coord.longitude!=0){
+            [eventsWithGeo addObject:event];
         }
     }
     return eventsWithGeo;
@@ -355,17 +348,8 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(PlaceStore);
 	NSArray *events = [eventStore eventsMatchingPredicate:predicate];
     EKEvent *event;
     for (event in events){
-        NSString *locate=event.location;
-        if (locate && event.title){
-            
-            NSRange textRangeLat;
-            textRangeLat =[locate rangeOfString:@"lat"];
-            
-            NSRange textRangeLon;
-            textRangeLon =[locate rangeOfString:@" lon"];
-            
-            if(textRangeLat.location != NSNotFound && textRangeLon.location != NSNotFound)
-            { 
+        CLLocationCoordinate2D coord=[self getEventCoordinate:event];
+        if (coord.latitude!=0 && coord.longitude!=0){
                 Place *p;
                 for (p in placeList){
                     if (p.event.location==event.location){
@@ -373,7 +357,6 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(PlaceStore);
                     }
                 }
                 break;
-            }
         }
     }
     
