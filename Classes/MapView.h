@@ -9,6 +9,13 @@
 #import "Place.h"
 #import "PlaceMark.h"
 #import "PlaceStore.h"
+typedef enum
+{
+    travelDriving=1,
+    travelWalking=2,
+    travelBicykling=3,
+}TravelModeType;
+
 
 @interface MapView : UIView<MKMapViewDelegate> {
 
@@ -22,6 +29,7 @@
     PlaceStore* placeStore;
     NSString* strTimeToPlace;
     NSNumber *timeToPlace;
+    TravelModeType travelMode;
 }
 
 @property (nonatomic, retain) UIColor* lineColor;

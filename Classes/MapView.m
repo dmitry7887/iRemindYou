@@ -37,14 +37,20 @@
         lpgr.minimumPressDuration = 1.0; //user needs to press for 1 seconds
         [mapView addGestureRecognizer:lpgr];
         [lpgr release];
-        
+
         placeStore=[PlaceStore sharedPlaceStore];
-        Place * p;
-        for (p in placeStore.placeList){
-            PlaceMark * placeMark=[[[PlaceMark alloc] initWithPlace:p] autorelease];
-            [mapView addAnnotation:placeMark];
+        if (placeStore.placeList.count>0){
+            Place * p;
+            for (p in placeStore.placeList){
+                PlaceMark * placeMark=[[[PlaceMark alloc] initWithPlace:p] autorelease];
+                [mapView addAnnotation:placeMark];
+            }
         }
-        
+        else {
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Welcome!" message:@"To add Event longpress to  map" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+			[alert show];
+			[alert release];
+        }
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(addPlaceMark:) name:@"addPlaceMark" object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(removePlaceMark:) name:@"removePlaceMark" object:nil];
         
@@ -89,6 +95,17 @@
     [placeStore addPlace:place];
 }
 
+- (void)viewWasDoubleTapped:(UIGestureRecognizer *)gestureRecognizer
+{
+    if (gestureRecognizer.state != UIGestureRecognizerStateBegan)
+        return;
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Welcome!" message:@"To add Event longpress to  map" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:nil];
+    
+    [alert show];
+    [alert release];
+    
+}
+
 #pragma mark -
 #pragma mark Methods for working with PlaceStore
 
@@ -105,7 +122,7 @@
 }
 
 -(void) addPlaceMark:(NSNotification *)notification {
-    Place * place=[[notification object] retain];
+    Place * place=[[notification object]retain];
     if (place){
         PlaceMark *placeMark=[[PlaceMark alloc]initWithPlace:place];
         [mapView addAnnotation:placeMark];
@@ -258,7 +275,7 @@
         NSLog(@"timeToPlace: %@", timeToPlace);
     }
     NSString* encodedPoints = [apiResponse stringByMatching:@"points:\\\"([^\\\"]*)\\\"" capture:1L];
-	return [self decodePolyLine:[encodedPoints mutableCopy]];
+	return [self decodePolyLine:[[encodedPoints mutableCopy]autorelease]];
 }
 
 -(void) calculateTimeFrom:(Place *) f to: (Place *) t;
@@ -433,6 +450,16 @@
     [super dealloc];
 }
 
+#pragma mark -
+#pragma mark UIAlertViewDelegate Methods
+
+// Called when an alert button is tapped.
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+	if(buttonIndex > 0) {
+		travelMode = buttonIndex; 
+	}
+    
+}
 
 
 
