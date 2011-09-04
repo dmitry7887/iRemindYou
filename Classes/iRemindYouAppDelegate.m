@@ -15,12 +15,21 @@
 
 - (void)applicationDidFinishLaunching:(UIApplication *)application {    
     NSLog(@"%s", __FUNCTION__);
-    
     // Override point for customization after app launch    
     [window addSubview:viewController.view];
     [window makeKeyAndVisible];
 }
 
+- (BOOL)application:(UIApplication *)app didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+    UILocalNotification *localNotif =
+    [launchOptions objectForKey:UIApplicationLaunchOptionsLocalNotificationKey];
+    if (localNotif) {
+        app.applicationIconBadgeNumber = localNotif.applicationIconBadgeNumber-1;
+    }
+    [window addSubview:viewController.view];
+    [window makeKeyAndVisible];
+    return YES;
+}
 /* ------------------------------------------- */
 
 - (void)applicationWillResignActive:(UIApplication *)application {
