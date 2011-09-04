@@ -14,6 +14,7 @@
 		1390588D11B1139400EEE493 /* PlaceMark.m in Sources */ = {isa = PBXBuildFile; fileRef = 1390588C11B1139400EEE493 /* PlaceMark.m */; };
 		1390589011B113EB00EEE493 /* Place.m in Sources */ = {isa = PBXBuildFile; fileRef = 1390588F11B113EB00EEE493 /* Place.m */; };
 		183344DE140E711D006F2C58 /* MainWindow-iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 183344DD140E711D006F2C58 /* MainWindow-iPad.xib */; };
+		184750A41413655800E03FAC /* schedule256.png in Resources */ = {isa = PBXBuildFile; fileRef = 184750A31413655800E03FAC /* schedule256.png */; };
 		1891141B140B8687006D8E06 /* EventKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18911419140B8687006D8E06 /* EventKit.framework */; };
 		1891141C140B8687006D8E06 /* EventKitUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1891141A140B8687006D8E06 /* EventKitUI.framework */; };
 		18B2B7BC140BB66E0087EFF2 /* PlaceStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 18B2B7BB140BB66E0087EFF2 /* PlaceStore.m */; };
@@ -39,13 +40,14 @@
 		1390588E11B113EB00EEE493 /* Place.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Place.h; sourceTree = "<group>"; };
 		1390588F11B113EB00EEE493 /* Place.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Place.m; sourceTree = "<group>"; };
 		183344DD140E711D006F2C58 /* MainWindow-iPad.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = "MainWindow-iPad.xib"; path = "iPad/MainWindow-iPad.xib"; sourceTree = "<group>"; };
+		184750A31413655800E03FAC /* schedule256.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = schedule256.png; sourceTree = "<group>"; };
 		18911419140B8687006D8E06 /* EventKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = EventKit.framework; path = System/Library/Frameworks/EventKit.framework; sourceTree = SDKROOT; };
 		1891141A140B8687006D8E06 /* EventKitUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = EventKitUI.framework; path = System/Library/Frameworks/EventKitUI.framework; sourceTree = SDKROOT; };
 		1897B875140E2C7200D4F462 /* SynthesizeSingleton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SynthesizeSingleton.h; sourceTree = "<group>"; };
 		18B2B7BA140BB66E0087EFF2 /* PlaceStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlaceStore.h; sourceTree = "<group>"; };
 		18B2B7BB140BB66E0087EFF2 /* PlaceStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlaceStore.m; sourceTree = "<group>"; };
 		1D30AB110D05D00D00671497 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
-		1D3623240D0F684500981E51 /* iRemindYouAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; path = iRemindYouAppDelegate.h; sourceTree = "<group>"; };
+		1D3623240D0F684500981E51 /* iRemindYouAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = iRemindYouAppDelegate.h; sourceTree = "<group>"; };
 		1D3623250D0F684500981E51 /* iRemindYouAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = iRemindYouAppDelegate.m; sourceTree = "<group>"; };
 		1D6058910D05DD3D006BFB54 /* iRemindYou.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iRemindYou.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1DF5F4DF0D08C38300B7A737 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
@@ -148,6 +150,7 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				184750A31413655800E03FAC /* schedule256.png */,
 				2899E5210DE3E06400AC0155 /* iRemindYouViewController.xib */,
 				28AD733E0D9D9553002E5188 /* MainWindow.xib */,
 				8D1107310486CEB800E47090 /* iRemindYou-Info.plist */,
@@ -158,10 +161,10 @@
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				1390576911B10F9800EEE493 /* MapKit.framework */,
 				18911419140B8687006D8E06 /* EventKit.framework */,
 				1891141A140B8687006D8E06 /* EventKitUI.framework */,
 				139057E511B112C500EEE493 /* CoreLocation.framework */,
-				1390576911B10F9800EEE493 /* MapKit.framework */,
 				1DF5F4DF0D08C38300B7A737 /* UIKit.framework */,
 				1D30AB110D05D00D00671497 /* Foundation.framework */,
 				288765A40DF7441C002DB57D /* CoreGraphics.framework */,
@@ -224,6 +227,7 @@
 				28AD733F0D9D9553002E5188 /* MainWindow.xib in Resources */,
 				2899E5220DE3E06400AC0155 /* iRemindYouViewController.xib in Resources */,
 				183344DE140E711D006F2C58 /* MainWindow-iPad.xib in Resources */,
+				184750A41413655800E03FAC /* schedule256.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
