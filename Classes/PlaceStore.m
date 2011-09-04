@@ -62,7 +62,6 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(PlaceStore);
                     p.description=event.notes;
                     p.event=event;
                     [placeList addObject:p];
-                    //Does contain the substring
                 }
             }
         }         
@@ -137,7 +136,11 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(PlaceStore);
 #pragma mark placeRemind accessors
 -(void) resetPlaceToRemind;
 {
-    placeToRemind=nil;
+    if (placeToRemind){
+        placeToRemind.timeToPlace=0;
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"addPlaceMark" object:placeToRemind];
+        placeToRemind=nil;
+    }
 }
 
 -(void) setPlaceToRemind;
@@ -149,7 +152,9 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(PlaceStore);
     
     if (placeToRemind)
     {
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"localNotify" object:placeToRemind]; 
+        if ([placeToRemind.event.startDate timeIntervalSinceNow]>0){
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"localNotify" object:placeToRemind]; 
+        }
         [[NSNotificationCenter defaultCenter] postNotificationName:@"refreshRoutes" object:placeToRemind]; 
     }    
 
