@@ -10,6 +10,7 @@
 
 
 @interface iRemindYouViewController : UIViewController<CLLocationManagerDelegate> {
+    UIToolbar *toolbar;
     CLLocation* currentLocation;
     MapView* mapView;
     BOOL needUpdate;
@@ -19,7 +20,7 @@
     BOOL                  isExecutingInBackground;
 }
 
-@property (nonatomic, retain) CLLocationManager     *locationManager;
+@property (nonatomic, retain) CLLocationManager *locationManager;
 @property (nonatomic, assign) BOOL isExecutingInBackground;
 @end
 

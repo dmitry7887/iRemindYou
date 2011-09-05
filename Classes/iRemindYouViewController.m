@@ -5,7 +5,7 @@
 //
 
 #import "iRemindYouViewController.h"
-
+e
 @implementation iRemindYouViewController
 
 @synthesize isExecutingInBackground, locationManager;
@@ -54,7 +54,10 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+  
     needUpdate=YES;
+
     [[UIApplication sharedApplication] cancelAllLocalNotifications];
 
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showViewController:) 
@@ -90,13 +93,54 @@
     
   	mapView = [[[MapView alloc] initWithFrame:
 						 CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)] autorelease];
-	
-	[self.view addSubview:mapView];
-
+   [self.view addSubview:mapView];
+    //create toolbar using new
+    toolbar = [UIToolbar new];
+    toolbar.barStyle = UIBarStyleDefault;
+    [toolbar sizeToFit];
+    //Caclulate the height of the toolbar
+    CGFloat toolbarHeight = [toolbar frame].size.height;
+        
+    //Get the bounds of the parent view
+    CGRect rootViewBounds = self.view.bounds;
+        
+    //Get the height of the parent view.
+    CGFloat rootViewHeight = CGRectGetHeight(rootViewBounds);
+        
+    //Get the width of the parent view,
+    CGFloat rootViewWidth = CGRectGetWidth(rootViewBounds);
+  
+    CGFloat toolBarTop = rootViewHeight-toolbarHeight;
+    
+    //Create a rectangle for the toolbar
+    CGRect rectArea = CGRectMake(0, toolBarTop, rootViewWidth, toolbarHeight);
+    
+    //Reposition and resize the receiver
+    [toolbar setFrame:rectArea];
+        
+    //Create a button
+    UIBarButtonItem *locationButton = [[UIBarButtonItem alloc] initWithTitle:@"Location" style:UIBarButtonItemStyleBordered target:self action:@selector(locationClicked:)];
+    UIBarButtonItem *drivingModeButton = [[UIBarButtonItem alloc] initWithTitle:@"Driving" style:UIBarButtonItemStyleBordered target:self action:@selector(travelModeClicked:)];
+    UIBarButtonItem *dalkingModeButton = [[UIBarButtonItem alloc] initWithTitle:@"Walking" style:UIBarButtonItemStyleBordered target:self action:@selector(travelModeClicked:)];
+    UIBarButtonItem *bicycingModeButton = [[UIBarButtonItem alloc] initWithTitle:@"Bicycling" style:UIBarButtonItemStyleBordered target:self action:@selector(travelModeClicked:)];
+    
+    
+    [toolbar setItems:[NSArray arrayWithObjects:locationButton,drivingModeButton, dalkingModeButton, bicycingModeButton, nil]];
+    
+    //Add the toolbar as a subview to the navigation controller.
+    [self.view addSubview:toolbar];
 }
-
 - (void)showViewController:(NSNotification *)notification {
     [self presentModalViewController:[notification object] animated:YES];
+}
+
+- (void) travelModeClicked:(id)sender {
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"travelMode" object:[NSNumber numberWithUnsignedInt:[[toolbar items] indexOfObject:sender]]];
+    needUpdate=YES;
+}
+
+- (void) locationClicked:(id)sender {
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"gotoLocation" object:[NSNumber numberWithUnsignedInt:[[toolbar items] indexOfObject:sender]]];
 }
 
 -(void) refreshRoutes:(NSNotification *)notification {
@@ -190,6 +234,7 @@
         [self.locationManager stopUpdatingLocation];
     }
     self.locationManager = nil;
+    mapView=nil;
 }
 
 - (void)dealloc {

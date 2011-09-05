@@ -122,9 +122,8 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(PlaceStore);
 -(void) updatePlace: (Place*) place;
 {
     EKEventEditViewController *addController = [[EKEventEditViewController alloc] initWithNibName:nil bundle:nil];
-  
-    place.event.location=[[NSString stringWithFormat:@"lat=%f",place.latitude] stringByAppendingString:[NSString stringWithFormat:@" lon=%f",place.longitude]];
 
+    place.event.location=[[NSString stringWithFormat:@"lat=%f",place.latitude] stringByAppendingString:[NSString stringWithFormat:@" lon=%f",place.longitude]];
     [self setPlaceToRemind];
 
     // set the addController's event store to the current event store.
@@ -141,6 +140,8 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(PlaceStore);
 {
     if (placeToRemind){
         placeToRemind.timeToPlace=0;
+        placeToRemind.description=placeToRemind.event.notes;
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"removePlaceMark" object:placeToRemind];
         [[NSNotificationCenter defaultCenter] postNotificationName:@"addPlaceMark" object:placeToRemind];
         placeToRemind=nil;
     }

@@ -24,7 +24,7 @@
 	if (self != nil) {
         mapView = [[MKMapView alloc] initWithFrame:CGRectMake(0, 0, frame.size.width, frame.size.height)];
 		mapView.showsUserLocation = YES;
-		[mapView setDelegate:self];
+        [mapView setDelegate:self];
 		[self addSubview:mapView];
 		routeView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, mapView.frame.size.width, mapView.frame.size.height)];
 		routeView.userInteractionEnabled = NO;
@@ -53,10 +53,13 @@
         }
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(addPlaceMark:) name:@"addPlaceMark" object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(removePlaceMark:) name:@"removePlaceMark" object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(travelMode:) name:@"travelMode" object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(gotoLocation:) name:@"gotoLocation" object:nil];
         
         [mapView.userLocation addObserver:self forKeyPath:@"location" options:(NSKeyValueObservingOptionNew|NSKeyValueObservingOptionOld) context:nil];
-        canRouting=YES;
+             canRouting=YES;
         timeToPlace=0;
+        travelMode=travelDriving;
 
 	}
 	return self;
@@ -95,17 +98,6 @@
     [placeStore addPlace:place];
 }
 
-- (void)viewWasDoubleTapped:(UIGestureRecognizer *)gestureRecognizer
-{
-    if (gestureRecognizer.state != UIGestureRecognizerStateBegan)
-        return;
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Welcome!" message:@"To add Event longpress to  map" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:nil];
-    
-    [alert show];
-    [alert release];
-    
-}
-
 #pragma mark -
 #pragma mark Methods for working with PlaceStore
 
@@ -124,7 +116,7 @@
 -(void) addPlaceMark:(NSNotification *)notification {
     Place * place=[[notification object]retain];
     if (place){
-        PlaceMark *placeMark=[[PlaceMark alloc]initWithPlace:place];
+        PlaceMark *placeMark=[[[PlaceMark alloc]initWithPlace:place]autorelease];
         [mapView addAnnotation:placeMark];
     }
 }
@@ -144,6 +136,20 @@
         PlaceMark *placeMark=[self PlaceMarkByPlace:place];
         [mapView removeAnnotation:placeMark];
     }
+}
+
+-(void) travelMode:(NSNotification *)notification {
+    NSNumber* number=[notification object];
+    travelMode=[number intValue];
+    NSLog(@"Set travelmode: %d",travelMode);
+    
+}
+
+-(void) gotoLocation:(NSNotification *)notification {
+    
+    NSLog(@"Set Location..");
+   [mapView.userLocation addObserver:self forKeyPath:@"location" options:(NSKeyValueObservingOptionNew|NSKeyValueObservingOptionOld) context:nil];
+    
 }
 
 #pragma mark -
@@ -256,8 +262,22 @@
 -(NSArray*) calculateRoutesFrom:(CLLocationCoordinate2D) f to: (CLLocationCoordinate2D) t {
 	NSString* saddr = [NSString stringWithFormat:@"%f,%f", f.latitude, f.longitude];
 	NSString* daddr = [NSString stringWithFormat:@"%f,%f", t.latitude, t.longitude];
-	
-	NSString* apiUrlStr = [NSString stringWithFormat:@"http://maps.google.com/maps?output=dragdir&saddr=%@&daddr=%@", saddr, daddr];
+	NSString* strTravelMode;
+    switch (travelMode) {
+        case travelDriving:
+            strTravelMode=@"Driving";
+            break;
+        case travelWalking:
+            strTravelMode=@"Walking";
+            break;
+        case travelBicykling:
+            strTravelMode=@"Bicycling";
+            break;
+        default:
+            break;
+    } 
+    
+	NSString* apiUrlStr = [NSString stringWithFormat:@"http://maps.google.com/maps?output=dragdir&saddr=%@&daddr=%@&mode=%@", saddr, daddr,strTravelMode];
 	NSURL* apiUrl = [NSURL URLWithString:apiUrlStr];
 	NSLog(@"api url: %@", apiUrl);
 	NSString *apiResponse = [NSString stringWithContentsOfURL:apiUrl];
