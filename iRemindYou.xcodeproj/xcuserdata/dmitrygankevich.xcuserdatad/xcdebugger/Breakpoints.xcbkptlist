@@ -9,26 +9,12 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "Classes/MapView.m"
-         timestampString = "336486342.276421"
+         timestampString = "336843384.368062"
          startingColumnNumber = "2147483647"
          endingColumnNumber = "2147483647"
-         startingLineNumber = "23"
-         endingLineNumber = "23"
-         landmarkName = "-initWithFrame:"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "No"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
-         isPathRelative = "1"
-         filePath = "Classes/PlaceStore.m"
-         timestampString = "336486790.464852"
-         startingColumnNumber = "2147483647"
-         endingColumnNumber = "2147483647"
-         startingLineNumber = "67"
-         endingLineNumber = "67"
-         landmarkName = "-init"
+         startingLineNumber = "280"
+         endingLineNumber = "280"
+         landmarkName = "-calculateRoutesFrom:to:"
          landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
@@ -37,11 +23,263 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "Classes/MapView.m"
-         timestampString = "336487561.344097"
+         timestampString = "336843384.368062"
          startingColumnNumber = "2147483647"
          endingColumnNumber = "2147483647"
-         startingLineNumber = "106"
-         endingLineNumber = "106"
+         startingLineNumber = "279"
+         endingLineNumber = "279"
+         landmarkName = "-calculateRoutesFrom:to:"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "No"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         isPathRelative = "1"
+         filePath = "Classes/MapView.m"
+         timestampString = "336843384.368062"
+         startingColumnNumber = "2147483647"
+         endingColumnNumber = "2147483647"
+         startingLineNumber = "390"
+         endingLineNumber = "390"
+         landmarkName = "-updateRouteView"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "No"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         isPathRelative = "1"
+         filePath = "Classes/MapView.m"
+         timestampString = "336843384.368062"
+         startingColumnNumber = "2147483647"
+         endingColumnNumber = "2147483647"
+         startingLineNumber = "387"
+         endingLineNumber = "387"
+         landmarkName = "-updateRouteView"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "No"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         isPathRelative = "1"
+         filePath = "Classes/MapView.m"
+         timestampString = "336843384.368062"
+         startingColumnNumber = "2147483647"
+         endingColumnNumber = "2147483647"
+         startingLineNumber = "443"
+         endingLineNumber = "443"
+         landmarkName = "-mapView:annotationView:didChangeDragState:fromOldState:"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "No"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         isPathRelative = "1"
+         filePath = "Classes/PlaceMark.m"
+         timestampString = "336572304.100913"
+         startingColumnNumber = "2147483647"
+         endingColumnNumber = "2147483647"
+         startingLineNumber = "37"
+         endingLineNumber = "37"
+         landmarkName = "-setCoordinate:"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "No"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         isPathRelative = "1"
+         filePath = "Classes/MapView.m"
+         timestampString = "336843384.368062"
+         startingColumnNumber = "2147483647"
+         endingColumnNumber = "2147483647"
+         startingLineNumber = "377"
+         endingLineNumber = "377"
+         landmarkName = "-showRouteFrom:to:"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "No"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         isPathRelative = "1"
+         filePath = "Classes/iRemindYouViewController.m"
+         timestampString = "336838394.681511"
+         startingColumnNumber = "2147483647"
+         endingColumnNumber = "2147483647"
+         startingLineNumber = "291"
+         endingLineNumber = "291"
+         landmarkName = "@implementation iRemindYouViewController"
+         landmarkType = "3">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "No"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         isPathRelative = "1"
+         filePath = "Classes/iRemindYouViewController.m"
+         timestampString = "336838394.681511"
+         startingColumnNumber = "2147483647"
+         endingColumnNumber = "2147483647"
+         startingLineNumber = "263"
+         endingLineNumber = "263"
+         landmarkName = "-locationManager:didUpdateToLocation:fromLocation:"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "No"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         isPathRelative = "1"
+         filePath = "Classes/MapView.m"
+         timestampString = "336843384.368062"
+         startingColumnNumber = "2147483647"
+         endingColumnNumber = "2147483647"
+         startingLineNumber = "447"
+         endingLineNumber = "447"
+         landmarkName = "-mapView:annotationView:didChangeDragState:fromOldState:"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "No"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         isPathRelative = "1"
+         filePath = "Classes/MapView.m"
+         timestampString = "336843384.368062"
+         startingColumnNumber = "2147483647"
+         endingColumnNumber = "2147483647"
+         startingLineNumber = "109"
+         endingLineNumber = "109"
+         landmarkName = "-PlaceMarkByPlace:"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "No"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         isPathRelative = "1"
+         filePath = "Classes/MapView.m"
+         timestampString = "336843384.368062"
+         startingColumnNumber = "2147483647"
+         endingColumnNumber = "2147483647"
+         startingLineNumber = "198"
+         endingLineNumber = "198"
+         landmarkName = "-timeStrToNum:"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "No"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         isPathRelative = "1"
+         filePath = "Classes/MapView.m"
+         timestampString = "336843384.368062"
+         startingColumnNumber = "2147483647"
+         endingColumnNumber = "2147483647"
+         startingLineNumber = "200"
+         endingLineNumber = "200"
+         landmarkName = "-timeStrToNum:"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "No"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         isPathRelative = "1"
+         filePath = "Classes/MapView.m"
+         timestampString = "336843384.368062"
+         startingColumnNumber = "2147483647"
+         endingColumnNumber = "2147483647"
+         startingLineNumber = "209"
+         endingLineNumber = "209"
+         landmarkName = "-timeStrToNum:"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "No"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         isPathRelative = "1"
+         filePath = "Classes/MapView.m"
+         timestampString = "336843384.368062"
+         startingColumnNumber = "2147483647"
+         endingColumnNumber = "2147483647"
+         startingLineNumber = "258"
+         endingLineNumber = "258"
+         landmarkName = "-timeStrToNum:"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "No"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         isPathRelative = "1"
+         filePath = "Classes/iRemindYouViewController.m"
+         timestampString = "336838394.681511"
+         startingColumnNumber = "2147483647"
+         endingColumnNumber = "2147483647"
+         startingLineNumber = "154"
+         endingLineNumber = "154"
+         landmarkName = "-localNotify:"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "No"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         isPathRelative = "1"
+         filePath = "Classes/iRemindYouViewController.m"
+         timestampString = "336838394.681511"
+         startingColumnNumber = "2147483647"
+         endingColumnNumber = "2147483647"
+         startingLineNumber = "152"
+         endingLineNumber = "152"
+         landmarkName = "-localNotify:"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "No"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         isPathRelative = "1"
+         filePath = "Classes/iRemindYouViewController.m"
+         timestampString = "336838394.681511"
+         startingColumnNumber = "2147483647"
+         endingColumnNumber = "2147483647"
+         startingLineNumber = "265"
+         endingLineNumber = "265"
+         landmarkName = "-locationManager:didUpdateToLocation:fromLocation:"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "No"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         isPathRelative = "1"
+         filePath = "Classes/iRemindYouAppDelegate.m"
+         timestampString = "336748675.450238"
+         startingColumnNumber = "2147483647"
+         endingColumnNumber = "2147483647"
+         startingLineNumber = "25"
+         endingLineNumber = "25"
+         landmarkName = "-application:didFinishLaunchingWithOptions:"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "No"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         isPathRelative = "1"
+         filePath = "Classes/MapView.m"
+         timestampString = "336843384.368062"
+         startingColumnNumber = "2147483647"
+         endingColumnNumber = "2147483647"
+         startingLineNumber = "117"
+         endingLineNumber = "117"
          landmarkName = "-addPlaceMark:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -51,26 +289,40 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "Classes/MapView.m"
-         timestampString = "336491764.874974"
+         timestampString = "336843384.368062"
          startingColumnNumber = "2147483647"
          endingColumnNumber = "2147483647"
-         startingLineNumber = "177"
-         endingLineNumber = "177"
-         landmarkName = "-calculateRoutesFrom:to:"
+         startingLineNumber = "44"
+         endingLineNumber = "44"
+         landmarkName = "-initWithFrame:"
          landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
-         shouldBeEnabled = "Yes"
+         shouldBeEnabled = "No"
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          isPathRelative = "1"
-         filePath = "Classes/MapView.m"
-         timestampString = "336492335.331227"
+         filePath = "Classes/iRemindYouViewController.m"
+         timestampString = "336833732.152729"
          startingColumnNumber = "2147483647"
          endingColumnNumber = "2147483647"
-         startingLineNumber = "180"
-         endingLineNumber = "180"
-         landmarkName = "-calculateRoutesFrom:to:"
+         startingLineNumber = "86"
+         endingLineNumber = "86"
+         landmarkName = "-viewDidLoad"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "No"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         isPathRelative = "1"
+         filePath = "Classes/PlaceStore.m"
+         timestampString = "336841374.730745"
+         startingColumnNumber = "2147483647"
+         endingColumnNumber = "2147483647"
+         startingLineNumber = "101"
+         endingLineNumber = "101"
+         landmarkName = "-editPlace:"
          landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
@@ -79,12 +331,68 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "Classes/MapView.m"
-         timestampString = "336492335.92332"
+         timestampString = "336843384.368062"
          startingColumnNumber = "2147483647"
          endingColumnNumber = "2147483647"
-         startingLineNumber = "176"
-         endingLineNumber = "176"
-         landmarkName = "-calculateRoutesFrom:to:"
+         startingLineNumber = "457"
+         endingLineNumber = "457"
+         landmarkName = "-mapView:annotationView:calloutAccessoryControlTapped:"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "No"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         isPathRelative = "1"
+         filePath = "Classes/PlaceStore.m"
+         timestampString = "336843384.368062"
+         startingColumnNumber = "2147483647"
+         endingColumnNumber = "2147483647"
+         startingLineNumber = "230"
+         endingLineNumber = "230"
+         landmarkName = "-eventEditViewController:didCompleteWithAction:"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "No"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         isPathRelative = "1"
+         filePath = "Classes/iRemindYouViewController.m"
+         timestampString = "336843624.190326"
+         startingColumnNumber = "2147483647"
+         endingColumnNumber = "2147483647"
+         startingLineNumber = "122"
+         endingLineNumber = "122"
+         landmarkName = "-viewDidLoad"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "No"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         isPathRelative = "1"
+         filePath = "Classes/iRemindYouViewController.m"
+         timestampString = "336843697.036399"
+         startingColumnNumber = "2147483647"
+         endingColumnNumber = "2147483647"
+         startingLineNumber = "124"
+         endingLineNumber = "124"
+         landmarkName = "-viewDidLoad"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "No"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         isPathRelative = "1"
+         filePath = "Classes/iRemindYouViewController.m"
+         timestampString = "336843800.657405"
+         startingColumnNumber = "2147483647"
+         endingColumnNumber = "2147483647"
+         startingLineNumber = "121"
+         endingLineNumber = "121"
+         landmarkName = "-viewDidLoad"
          landmarkType = "5">
       </FileBreakpoint>
    </FileBreakpoints>
